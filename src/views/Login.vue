@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import auth from "@/utils/auth";
 export default {
   name: "my-login",
   data() {
@@ -69,11 +70,11 @@ export default {
         // valid 代表整体表单是否校验成功
         if (valid) {
           // 校验成功，进行登录
-          // console.log('进行登录')
           this.$http
-            .post("authorizations", this.loginForm)
+            .post("/authorizations", this.loginForm)
             .then(res => {
-              // 登录成功
+              // 登录成功   res.data.data里面有服务器端返回的token信息
+              auth.setUser(res.data.data);
               this.$router.push("/");
             })
             .catch(() => {
