@@ -66,21 +66,36 @@ export default {
     login() {
       // 登录前，对整体表单进行校验
       // this.$refs.loginForm  就是组件实例
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate(async valid => {
         // valid 代表整体表单是否校验成功
         if (valid) {
-          // 校验成功，进行登录
-          this.$http
-            .post("/authorizations", this.loginForm)
-            .then(res => {
-              // 登录成功   res.data.data里面有服务器端返回的token信息
-              auth.setUser(res.data.data);
-              this.$router.push("/");
-            })
-            .catch(() => {
-              // 错误提示
-              this.$message.error("手机号或验证码错误");
-            });
+          // // 校验成功，进行登录
+          // this.$http
+          //   .post("/authorizations", this.loginForm)
+          //   .then(res => {
+          //     // 登录成功   res.data.data里面有服务器端返回的token信息
+          //     auth.setUser(res.data.data);
+          //     this.$router.push("/");
+          //   })
+          //   .catch(() => {
+          //     // 错误提示
+          //     this.$message.error("手机号或验证码错误");
+          //   });
+          // async和await修改登录请求
+          // 使用 try{可能出现异常代码片段}catch(){捕获异常}
+          try {
+            // 理想情况
+            // 1. 发请求获取数据
+            const res = await this.$http.post("authorizations", this.loginForm);
+            // 2. 本地存储用户信息
+            auth.setUser(res.data.data);
+            // 3. 跳转到 首页
+            this.$router.push("/");
+          } catch (e) {
+            // 捕获异常
+            // 1. 错误提示即可
+            this.$message.error("手机号或验证码错误");
+          }
         }
       });
     }
