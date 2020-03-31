@@ -12,6 +12,11 @@ import NotFound from '@/views/404.vue'
 import Setting from '@/views/Setting.vue'
 // 导入Article模块
 import Article from '@/views/Article.vue'
+//导入Publish发布文章模块
+import Publish from '@/views/Publish.vue'
+// 导入素材管理模块
+import Image from '@/views/Image.vue'
+
 Vue.use(VueRouter)
 
 //路由 规则
@@ -27,6 +32,8 @@ const routes = [
             { path: '/', component: Welcome },
             { path: '/setting', component: Setting },
             { path: '/articles', component: Article },
+            { path: '/publish', component: Publish },
+            { path: '/image', component: Image },
         ]
     },
     // 除去上面的页面后其他页面显示

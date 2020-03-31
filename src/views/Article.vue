@@ -20,19 +20,10 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select
-            @change="changeChannel"
-            clearable
-            v-model="reqParams.channel_id"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!-- 自己封装的频道组件 -->
+          <!-- <my-channel :value="reqParams.channel_id" @input="reqParams.channel_id=$event"></my-channel> -->
+          <!-- 简写 -->
+          <my-channel v-model="reqParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期：">
           <el-date-picker
@@ -129,6 +120,7 @@ export default {
       reqParams: {
         // 当字段的值为null的时候，这个不会发送给后台(null和""的区别)
         status: null,
+        // channel_id需要传值到子组件
         channel_id: null,
         begin_pubdate: null,
         end_pubdate: null,
@@ -136,18 +128,18 @@ export default {
         per_page: 20
       },
       articles: [],
-      dateArr: [],
+      dateArr: []
       // 频道下拉选项数据
-      channelOptions: []
+      // channelOptions: []
       // 日期范围数据 [起始日期,结束日期]
     };
   },
   created() {
-    this.getChannelOptions();
+    // this.getChannelOptions();
     this.getArticles();
   },
   methods: {
-      // 删除文章
+    // 删除文章
     delArticle(id) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -175,12 +167,12 @@ export default {
     toEditArticle(id) {
       this.$router.push(`/publish?id=${id}`);
     },
-    // 清空频道
-    changeChannel(value) {
-      if (value == "") {
-        this.reqParams.channel_id = null;
-      }
-    },
+    // // 清空频道
+    // changeChannel(value) {
+    //   if (value == "") {
+    //     this.reqParams.channel_id = null;
+    //   }
+    // },
     // 筛选文章
     filterArticle() {
       // 回到第一页
@@ -188,15 +180,15 @@ export default {
       // 根据resParams筛选
       this.getArticles();
     },
-    // 获取频道下拉选项数据
-    async getChannelOptions() {
-      // 对象的解构,相当于拿到res.data.data
-      const {
-        data: { data }
-      } = await this.$http.get("/channels");
-      // console.log(data.channels);
-      this.channelOptions = data.channels;
-    },
+    // // 获取频道下拉选项数据
+    // async getChannelOptions() {
+    //   // 对象的解构,相当于拿到res.data.data
+    //   const {
+    //     data: { data }
+    //   } = await this.$http.get("/channels");
+    //   // console.log(data.channels);
+    //   this.channelOptions = data.channels;
+    // },
     // 选择日期范围
     changeDate(dateArr) {
       if (dateArr) {
@@ -221,7 +213,7 @@ export default {
       // 设置总条数
       this.total = data.total_count;
     },
-  
+
     // 分页切(current-change的对调参数默认是当前页,再次传参然后渲染)
     changePager(newPage) {
       // 修改参数
