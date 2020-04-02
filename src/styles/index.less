@@ -30,17 +30,20 @@
 }
 
 // 覆盖富文本样式
-// .container-publish .ql-editor 一定比 .ql-editor 高
+// .publish-container .ql-editor 一定比 .ql-editor 高
 // 和引入的先后无关，优先级一定大于后者。
-// 好处：让样式仅在 publish 组件下生效。
-.container-publish .ql-editor{
+// 覆盖富文本样式(publish-container目的提高选择器优先级)
+.publish-container .ql-editor{
   height: 300px;
 }
-.container-publish .ql-toolbar.ql-snow{
+.publish-container .ql-toolbar.ql-snow{
   padding: 0 8px;
 }
-
-// 覆盖  my-image 组件中的对话框样式
-.my-image .el-dialog__body{
-  padding-bottom: 0;
-}
+// 覆盖 my-cover 组件中的对话框样式
+.my-cover{
+  display: inline-block;
+  margin-right: 15px;
+  &.el-dialog__body{
+    padding-bottom: 0;
+  }
+} 

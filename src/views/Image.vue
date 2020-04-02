@@ -6,6 +6,7 @@
       </div>
       <!-- 按钮栏 -->
       <div class="btn_box">
+        <!-- 数据双向绑定 collect-->
         <el-radio-group @change="changeCollect()" v-model="reqParams.collect" size="small">
           <!-- 加冒号才解析问Boolean类型 -->
           <el-radio-button :label="false">全部</el-radio-button>
@@ -160,7 +161,7 @@ export default {
       // // console.log(this.images);
       this.total = data.total_count;
     },
-    // 改变单选按钮触发
+    // 改变全部和收藏单选按钮触发
     changeCollect() {
       // this.collect = !this.collect;
       this.reqParams.page = 1;

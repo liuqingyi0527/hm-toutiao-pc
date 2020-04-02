@@ -16,6 +16,9 @@ import Article from '@/views/Article.vue'
 import Publish from '@/views/Publish.vue'
 // 导入素材管理模块
 import Image from '@/views/Image.vue'
+// 导入评论区域
+import Comment from '@/views/Comment.vue'
+import Fans from '@/views/Fans'
 
 Vue.use(VueRouter)
 
@@ -34,6 +37,8 @@ const routes = [
             { path: '/articles', component: Article },
             { path: '/publish', component: Publish },
             { path: '/image', component: Image },
+            { path: '/comment', component: Comment },
+            { path: '/fans', component: Fans }
         ]
     },
     // 除去上面的页面后其他页面显示
