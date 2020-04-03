@@ -1,24 +1,24 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
-// 导入组件
-import Login from '../views/Login.vue'
-import Home from '../views/Home.vue'
-import Welcome from '../views/Welcome.vue'
 // 操作用户信息工具模块
 import auth from '@/utils/auth'
+// 导入组件
+const Login = () => import('../views/Login.vue')
+const Home = () => import('../views/Home.vue')
+const Welcome = () => import('../views/Welcome.vue')
+
 // 404组件
-import NotFound from '@/views/404.vue'
-// 设置模块
-import Setting from '@/views/Setting.vue'
+const NotFound = () => import('../views/404.vue')
+const Setting = () => import('../views/Setting.vue')
 // 导入Article模块
-import Article from '@/views/Article.vue'
+const Article = () => import('../views/Article.vue')
 //导入Publish发布文章模块
-import Publish from '@/views/Publish.vue'
+const Publish = () => import('../views/Publish.vue')
 // 导入素材管理模块
-import Image from '@/views/Image.vue'
+const Image = () => import('../views/Image.vue')
 // 导入评论区域
-import Comment from '@/views/Comment.vue'
-import Fans from '@/views/Fans'
+const Comment = () => import('../views/Comment.vue')
+const Fans = () => import('../views/Fans.vue')
 
 Vue.use(VueRouter)
 

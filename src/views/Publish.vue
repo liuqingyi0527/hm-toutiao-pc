@@ -31,7 +31,7 @@
               <!-- <my-cover
                 :value="articleForm.cover.images[0]"
                 @input="articleForm.cover.images[0]=$event"
-              >选择封皮</my-cover>-->
+              ></my-cover> -->
             </div>
             <!-- 封皮组件多图 -->
             <div v-if="articleForm.cover.type===3">
@@ -110,7 +110,7 @@ export default {
     }
   },
   watch: {
-    // 监听地址栏哈希后面id的变化
+    // 监听地址栏哈希后面id的变化(历史回退问题)
     '$route.query.id': function () {
       // 监听 this.$route.query.id 的数据变化
       if (this.$route.query.id) {

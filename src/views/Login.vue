@@ -86,8 +86,9 @@ export default {
           try {
             // 理想情况
             // 1. 发请求获取数据
-            const res = await this.$http.post("authorizations", this.loginForm);
+            const res = await this.$http.post("/authorizations", this.loginForm);
             // 2. 本地存储用户信息
+            // console.log(res);
             auth.setUser(res.data.data);
             // 3. 跳转到 首页
             this.$router.push("/");

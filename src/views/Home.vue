@@ -87,6 +87,7 @@ import auth from "@/utils/auth";
 import eventBus from "@/eventBus";
 export default {
   name: "my-home",
+
   data() {
     return {
       //侧边栏默认是展开状态
@@ -101,9 +102,10 @@ export default {
     const user = auth.getUser();
     this.userName = user.name;
     this.userPhoto = user.photo;
-    // setting的子组件传值给父组件
+    //给事件主线eventBus绑定事件，接收 setting的组件的传值
     eventBus.$on("updateUserName", name => {
-      console.log(111);
+      // console.log(111);
+      // 赋值给用户名
       this.userName = name;
     });
     eventBus.$on("updateUserPhoto", photo => {

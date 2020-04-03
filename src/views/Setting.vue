@@ -25,6 +25,7 @@
             </el-form-item>
           </el-form>
         </el-col>
+        <!-- 上传组件 -->
         <el-col :span="12" style="text-align: center;">
           <!-- action属性不能删除，组件做了校验 -->
           <el-upload
@@ -50,7 +51,7 @@ export default {
   name: "app-setting",
   data() {
     return {
-      //用户信息
+      //用户信息(注意编辑用户信息，主需要三个参数)
       user: {
         name: "",
         intro: "",
@@ -64,77 +65,61 @@ export default {
   },
   methods: {
     // 上传图片
-    uploadImage({ file }) {
-      const user = auth.getUser();
+    async uploadImage({ file }) {
+      // 选择图片之后，触发这个函数，把包含图片信息的对象传入进来
+      // 自己上传  使用axios进行  所有不需要额外的去配置组件了。
+      // 选择图片后获取file对象，封装成formdata数据对象，使用axios进行提交。
       const fd = new FormData();
       fd.append("photo", file);
-      this.$http({
-        method: "PATCH",
-        url: "/user/photo",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: "Bearer " + user.token
-        },
-        data: fd
-      })
-        .then(res => {
-          // 预览
-          this.user.photo = res.data.data.photo;
-          // 本地同步
-          user.photo = res.data.data.photo;
-          auth.setUser(user);
-          // home组件同步
-          eventBus.$emit("updateUserPhoto", res.data.data.photo);
-        })
-        .catch(err => {
-          console.log(err.message);
-        });
+      const {
+        data: { data }
+      } = await this.$http.patch("/user/photo", fd);
+      // 预览
+      this.user.photo = data.photo;
+      // 本地同步
+      const user = auth.getUser();
+      user.photo = data.photo;
+      auth.setUser(user);
+      // home组件同步
+      eventBus.$emit("updateUserPhoto", data.photo);
+      // 提示
+      this.$message.success("修改用户头像成功");
     },
-    // 保存设置
-    saveSetting() {
+    // 保存设置按钮
+    async saveSetting() {
       try {
-        const user = auth.getUser();
-        // 取出后台需要的三个数据
+        // 取出后台需要的三个数据（解构三个数据）
         const { name, intro, email } = this.user;
-        this.$http({
-          method: "patch",
-          url: "/user/profile",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + user.token
-          },
-          data: { name, intro, email }
-        }).then(() => {
-          // console.log(user.name);
-          this.$message.success("修改用户信息成功");
-          user.name = name;
-          auth.setUser(user);
-          // 同步home组件(在seting组件传用户名称给home组件)
-          eventBus.$emit("updateUserName", name);
-        });
+        // 编辑用户的接口（只需要user里的三个数据为参数）
+        await this.$http.patch("/user/profile", { name, intro, email });
+        this.$message.success("修改用户信息成功");
+        // 同步home组件(在seting组件传用户名称给home组件，将改完的用户名传过去)
+        eventBus.$emit("updateUserName", name);
+        // 同步本地存储
+        // 1. 获取本地用户信息
+        // 2. 修改拿到的用户信息用户名称
+        // 3. 在把修改好数据存储起来
+        const user = auth.getUser();
+        user.name = name;
+        auth.setUser(user);
       } catch (e) {
-        this.$message.error("修改用户信息失败");
+        console.log(e);
+        
+        console.log(e.response);
+        if (e.response && e.response.status === 409) {
+          this.$message.error("媒体名重复");
+        } else {
+          this.$message.error("修改用户信息失败" + e);
+        }
       }
     },
     // 获取用户信息
-    getUserInfo() {
-      const user = auth.getUser();
-      // console.log(user.token);
-      this.$http({
-        method: "get",
-        url: "/user/profile",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + user.token
-        }
-      })
-        .then(res => {
-          // console.log(1111);
-          this.user = res.data.data;
-        })
-        .catch(err => {
-          // console.log(err);
-        });
+    async getUserInfo() {
+      const {
+        data: { data }
+      } = await this.$http.get("/user/profile");
+      // 用户信息  头像  数据
+      this.user = data;
     }
   }
 };

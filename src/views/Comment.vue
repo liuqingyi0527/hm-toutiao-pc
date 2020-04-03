@@ -9,9 +9,11 @@
       <el-table-column label="总评论数" prop="total_comment_count"></el-table-column>
       <el-table-column label="粉丝评论数" prop="fans_comment_count"></el-table-column>
       <el-table-column label="评论状态">
+        <!-- 自定义列需要用插槽  -->
         <template slot-scope="scope">{{scope.row.comment_status?'正常':'关闭'}}</template>
       </el-table-column>
       <el-table-column prop="address" label="操作">
+         <!-- 自定义列需要用插槽  -->
         <template slot-scope="scope">
           <el-button
             @click="toggleStatus(scope.row)"
@@ -41,7 +43,7 @@ export default {
   name: "app-comment",
   data() {
     return {
-      // 评论列表（文章列表接口，此时用来维护评论功能）
+      // 评论列表（文章列表接口，直接请求参数不一样）
       comments: [],
       reqParams: {
         response_type: "comment",
@@ -57,9 +59,8 @@ export default {
   },
   methods: {
     //  评论操作
-
     toggleStatus(row) {
-      // 解释：row 其实就是comments数组遍历后的每一个对象。
+      // row 其实就是comments数组遍历后的每一个对象。
       const text1 =
         "您是否确定要关闭该文章的评论功能，关闭后用户无法对文章进行评论。";
       const text2 = "您是否确定要打开该文章的评论功能。";
@@ -78,9 +79,9 @@ export default {
             });
             // 提示
             this.$message.success(
-              data.allow_comment ? "打开成功" : "关闭成功"
+              data.allow_comment ? "打开评论成功" : "关闭评论成功"
             );
-            // 修改当前行文章的评论状态
+            // 修改当前行文章的评论状态（更新视图）
             row.comment_status = data.allow_comment;
           } catch (e) {
             this.$message.error("操作失败");
